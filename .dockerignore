@@ -1,0 +1,14 @@
+.git
+.github
+.venv
+.vscode
+.devcontainer
+__pycache__
+**/__pycache__
+*.pyc
+*.pyo
+.DS_Store
+images
+README.md
+requirements.txt
+tokens.py
