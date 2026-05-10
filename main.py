@@ -63,7 +63,15 @@ def send_eco(message):
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    bot.reply_to(message, "Вот список команд, которые я понимаю:\n /start - начать общение с ботом\n /hello - поздороваться с ботом\n /bye - попрощаться с ботом\n/eco - получить сайт с экологической тематикой\n /help - показать это сообщение\n/say - узнать о боте и запустить gpt chat\n/eco_2 - получить сайт с экологической тематикой 2\n/eco_3 - получить сайт с экологической тематикой 3")
+    bot.reply_to(message, """Вот список команд, которые я понимаю: /start - начать общение с ботом
+    /hello - поздороваться с ботом
+    /bye - попрощаться с ботом
+    /eco - получить сайт с экологической тематикой
+    /help - показать это сообщение
+    /say - узнать о боте и запустить gpt chat
+    /eco_2 - получить сайт с экологической тематикой 2
+    /eco_3 - получить сайт с экологической тематикой 3
+    """)
 
 
 # Handle '/start' and '/help'
@@ -151,13 +159,7 @@ def echo_message_3(message):
 
 
 
-@bot.message_handler(commands=['eco_2'])
-def echo_message_2(message):
-    bot.reply_to(message, "Вот еще один экологический сайт: https://www.greenpeace.org/")
 
-@bot.message_handler(commands=['eco_3'])
-def echo_message_2(message):
-    bot.reply_to(message, "")
 
 logging.basicConfig(level=logging.INFO)
 logging.info("starting bot")
