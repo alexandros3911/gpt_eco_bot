@@ -78,7 +78,7 @@ def send_help(message):
 @bot.message_handler(commands=['say'])
 def gpt_answer(message):
     bot.reply_to(message, """\
-Привет! 🌱
+Привет! 
 Я экологический бот.
 Спроси меня про сортировку мусора, защиту природы или снижение выбросов.
 """)
@@ -115,6 +115,9 @@ def echo_message(message):
     thinking_message = bot.reply_to(message,
         "🤔 I am thinking..."
     )
+    bot.send_chat_action(message.chat.id, 'typing', timeout=15)
+    bot.send_chat_action(message.chat.id, 'typing', timeout=15)
+
 
     try:
         response = client.chat.completions.create(

@@ -14,4 +14,4 @@ RUN pipenv install --system
 
 COPY . .
 
-CMD ["python", "bot.py"]
+CMD ["python", "main_async.py"]

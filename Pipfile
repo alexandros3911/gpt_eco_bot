@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 pytelegrambotapi = "*"
 openai = "*"
+python-dotenv = "*"
+openai-async = "*"
+aiohttp = "*"
 
 [dev-packages]
 watchdog = "*"
