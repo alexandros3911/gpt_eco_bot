@@ -11,4 +11,4 @@ __pycache__
 images
 README.md
 requirements.txt
-tokens.py
+.env
