@@ -50,7 +50,13 @@ async def enable_eco(call):
 
     await bot.send_message(
         call.message.chat.id,
-        "Режим экологии включён!"
+        "✅" 
+        
+    )
+
+    await bot.send_message(
+        call.message.chat.id,
+        "Режим экологии включён"
     )
 
     await bot.answer_callback_query(call.id)
