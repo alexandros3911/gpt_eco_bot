@@ -6,6 +6,7 @@ from telebot.async_telebot import AsyncTeleBot
 from openai import AsyncOpenAI
 import logging 
 import aiohttp
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 log_level = os.environ.get("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(level=logging.getLevelName(log_level), format='%(asctime)s - %(levelname)s - %(message)s')
@@ -15,14 +16,46 @@ from tokens import BOT_TOKEN, OPENAI_API_KEY
 bot = AsyncTeleBot(BOT_TOKEN)
 client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
+MAX_HISTORY = 5
+
+dialog_history = defaultdict(list)
+
+eco_mode = set()
+    
+def get_start_kb():
+    kb = InlineKeyboardMarkup()
+    kb.add(
+        InlineKeyboardButton(
+            "If you are helping eco then click",
+            callback_data="eco_mode"
+        )
+    )
+    return kb
+
 @bot.message_handler(commands=['start'])
 async def gpt_answer(message):
-    await bot.reply_to(message, """\
+    await bot.reply_to(
+        message,
+        """\
 Привет! 
 Я экологический бот.
-Спроси меня про сортировку мусора, защиту природы или снижение выбросов.              
-""")
+Спроси меня про сортировку мусора, защиту природы или снижение выбросов.
+""",
+        reply_markup=get_start_kb() 
+    )
+
+@bot.callback_query_handler(func=lambda call: call.data == "eco_mode")
+async def enable_eco(call):
+    eco_mode.add(call.from_user.id)
+
+    await bot.send_message(
+        call.message.chat.id,
+        "Режим экологии включён!"
+    )
+
+    await bot.answer_callback_query(call.id)
     
+
 
 SYSTEM_PROMPT = """
 Ты экологический помощник.
@@ -43,17 +76,16 @@ SYSTEM_PROMPT = """
 Отвечай простым и понятным языком.
 """
 
-MAX_HISTORY = 5
-
-dialog_history = defaultdict(list)
 
 
-    
 
 @bot.message_handler(func=lambda message: True)
 async def echo_message(message):
     user_id = message.from_user.id
     user_text = message.text
+    if user_id not in eco_mode:
+        await bot.reply_to(message, "Нажми /start и включи режим")
+        return
 
     logging.info(f"Received message from user {user_id}: {user_text}")
 
@@ -125,7 +157,6 @@ async def echo_message(message):
 def check_418(text):
         if "418" in text:
             raise Exception("I am a teapot (418) - The server refuses to brew coffee because it is, permanently, a teapot.")
-
 
 if __name__ == "__main__":
     asyncio.run(bot.polling())
